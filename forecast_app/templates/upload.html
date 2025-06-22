@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}Загрузка данных{% endblock %}
+{% block content %}
+<div class="container mt-4">
+  <h2><i class="bi bi-upload"></i> Загрузка данных</h2>
+  <br>
+  <form method="post" enctype="multipart/form-data" class="mb-3">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="id_file" class="form-label">Загрузите CSV файл:</label>
+      {{ form.file }}
+    </div>
+    <div class="d-flex gap-2">
+      <button type="submit" name="upload" class="btn btn-primary btn-lg">
+        <i class="bi bi-cloud-upload"></i> Загрузить и предпросмотр
+      </button>
+      <a href="{% url 'upload' %}?clear=1" class="btn btn-outline-danger btn-lg">
+        <i class="bi bi-x-circle"></i> Очистить файл
+      </a>
+    </div>
+  </form>
+
+  {% if success %}
+    <div class="alert alert-success">{{ success }}</div>
+  {% endif %}
+
+  {% if errors %}
+    <div class="alert alert-danger">
+      <ul class="mb-0">
+        {% for error in errors %}
+          <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+
+  {% if preview_table %}
+    <a class="btn btn-outline-info mb-3" data-bs-toggle="collapse" href="#previewTable" role="button">
+      <i class="bi bi-eye"></i> Показать/Скрыть предпросмотр
+    </a>
+    <div class="collapse show" id="previewTable">
+      <div class="card card-body bg-light shadow-sm">
+        {{ preview_table|safe }}
+      </div>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

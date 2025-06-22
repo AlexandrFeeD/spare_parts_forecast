@@ -1,0 +1,59 @@
+/* Базовые переменные для светлой темы */
+:root {
+  --bg-color: #ffffff;
+  --text-color: #000000;
+  --sidebar-bg: #f8f9fa;
+  --content-bg: #ffffff;
+  --link-color: #000;
+  --link-hover: #333;
+}
+
+/* Переменные для тёмной темы */
+body.dark-theme {
+  --bg-color: #111111;
+  --text-color: #ffffff;
+  --sidebar-bg: #1e1e1e;
+  --content-bg: #222222;
+  --link-color: #ddd;
+  --link-hover: #fff;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.wrapper {
+  display: flex;
+  flex: 1;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 220px;
+  background-color: var(--sidebar-bg);
+  padding: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.sidebar ul li a {
+  color: var(--link-color);
+  text-decoration: none;
+}
+
+.sidebar ul li a:hover {
+  color: var(--link-hover);
+}
+
+.content {
+  flex-grow: 1;
+  padding: 40px;
+  background-color: var(--content-bg);
+  transition: background-color 0.3s ease;
+}

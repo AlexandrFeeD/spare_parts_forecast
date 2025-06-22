@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <style>
+        body { font-family: DejaVuSans, sans-serif; font-size: 12pt; }
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 4px; text-align: center; }
+    </style>
+</head>
+<body>
+    <h2>Отчет по прогнозу</h2>
+    <p>Запасная часть: <b>{{ part }}</b></p>
+    <p><b>Метод(ы) прогнозирования:</b> {{ method }}</p>
+    <p>Дата: {{ date|date:"d.m.Y H:i" }}</p>
+    {{ table|safe }}
+{% if chart_base64 %}
+    <br>
+    <h3>График прогноза</h3>
+    <img src="data:image/png;base64,{{ chart_base64 }}" style="width: 100%; max-height: 400px;">
+{% endif %}
+{% if errors %}
+    <br>
+    <h3>Оценка точности прогноза</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Метод</th>
+                <th>RMSE</th>
+                <th>MAPE (%)</th>
+                <th>SMAPE (%)</th>
+                <th>WAPE (%)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for method, metrics in errors.items %}
+            <tr>
+                <td>{{ method }}</td>
+                <td>{{ metrics.RMSE }}</td>
+                <td>{{ metrics.MAPE }}</td>
+                <td>{{ metrics.SMAPE }}</td>
+                <td>{{ metrics.WAPE }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+</body>
+</html>

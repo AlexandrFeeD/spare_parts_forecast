@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+  <h2><i class="bi bi-file-earmark-bar-graph-fill"></i> Отчёт</h2>
+
+  {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+  {% else %}
+    <p><b>Запасная часть:</b> {{ part }}</p>
+
+    <div class="mb-3">
+      <a href="?download=csv" class="btn btn-outline-secondary"><i class="bi bi-filetype-csv"></i> Скачать CSV</a>
+      <a href="?download=pdf&chart=1" class="btn btn-outline-danger"><i class="bi bi-file-earmark-pdf"></i> PDF с графиком</a>
+      <a href="?download=pdf&chart=0" class="btn btn-outline-danger"><i class="bi bi-file-earmark-pdf-fill"></i> PDF без графика</a>
+    </div>
+
+    <h4 class="mt-4"><i class="bi bi-table"></i> Таблица прогноза</h4>
+    <div class="table-responsive">{{ table|safe }}</div>
+
+    {% if errors %}
+    <h4 class="mt-4"><i class="bi bi-bar-chart-steps"></i> Точность прогноза</h4>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Метод</th>
+          <th>RMSE</th>
+          <th>MAPE (%)</th>
+          <th>SMAPE (%)</th>
+          <th>WAPE (%)</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for method, metrics in errors.items %}
+        <tr>
+          <td>{{ method }}</td>
+          <td>{{ metrics.RMSE }}</td>
+          <td>{{ metrics.MAPE }}</td>
+          <td>{{ metrics.SMAPE }}</td>
+          <td>{{ metrics.WAPE }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% endif %}
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="container mt-4">
+  <h2><i class="bi bi-bar-chart-line-fill"></i> Прогноз потребления</h2>
+
+  <form method="post" class="row g-3 align-items-end">
+    {% csrf_token %}
+    <div class="col-md-4">
+      <label class="form-label">{{ form.part_name.label }}</label>
+      {{ form.part_name|add_class:"form-select" }}
+    </div>
+    <div class="col-md-3">
+      <label class="form-label">{{ form.months_ahead.label }}</label>
+      {{ form.months_ahead|add_class:"form-control" }}
+    </div>
+    <div class="col-md-3">
+      <label class="form-label">{{ form.method.label }}</label>
+      {{ form.method|add_class:"form-select" }}
+    </div>
+    <div class="col-md-2 form-check form-switch">
+      <input type="checkbox" class="form-check-input" name="only_history" {% if request.POST.only_history %}checked{% endif %}>
+      <label class="form-check-label">Только история</label>
+    </div>
+    <div class="col-12">
+      <button type="submit" class="btn btn-success btn-lg"><i class="bi bi-bar-chart"></i> Построить</button>
+    </div>
+  </form>
+
+  {% if not plot_div and request.session.forecast_plot %}
+    <div class="mt-4">
+      <a href="#previousChart" class="btn btn-outline-info mb-3" data-bs-toggle="collapse">
+        <i class="bi bi-arrow-repeat"></i> Показать предыдущий график
+      </a>
+      <div class="collapse" id="previousChart">
+        <div class="card card-body bg-light">
+          {{ request.session.forecast_plot|safe }}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  {% if plot_div %}
+    <hr><h4><i class="bi bi-graph-up"></i> График</h4>
+    <div class="card p-3 bg-light shadow-sm">{{ plot_div|safe }}</div>
+  {% endif %}
+
+<!--  {% if table_html %}-->
+<!--    <hr><h4><i class="bi bi-table"></i> Таблица прогноза</h4>-->
+<!--    <div class="table-responsive">-->
+<!--      <table class="table table-bordered">-->
+<!--        {{ table_html|safe }}-->
+<!--      </table>-->
+<!--    </div>-->
+<!--  {% endif %}-->
+
+  {% if error %}
+    <div class="alert alert-danger mt-3">{{ error }}</div>
+  {% endif %}
+</div>
+{% endblock %}
